@@ -25,26 +25,19 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawerLayout)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        setUpToolbar()
+    }
 
-        val api = RetrofitHelper.getRetrofitInstance().create(BookApi::class.java)
-
-        // Testing the api whether it is working or not
-        lifecycleScope.launch {
-            /*val response = withContext(Dispatchers.IO) {
-                api.getRecentBooks()
-            }*/
-
-            try {
-                Log.d(TAG, "onCreate: ${api.getRecentBooks().body()}")
-            } catch (e: Exception) {
-                Log.e(TAG, "onCreate: ${e.cause}")
-            }
-        }
+    fun setUpToolbar() {
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.title = "Toolbar"
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }
