@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="coolBlue">#77B0ED</color>
+    <color name="colorFavourite">#21257c</color>
+    <color name="iconBackgroundColor">#74BFFF</color>
 </resources>
