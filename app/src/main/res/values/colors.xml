@@ -6,4 +6,8 @@
     <color name="coolBlue">#77B0ED</color>
     <color name="colorFavourite">#21257c</color>
     <color name="iconBackgroundColor">#74BFFF</color>
+
+    <!-- Light Theme -->
+    <color name="primary">#1E3A8A</color>
+
 </resources>
