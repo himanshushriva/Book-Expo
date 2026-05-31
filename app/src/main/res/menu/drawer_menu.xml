@@ -4,7 +4,7 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/dashboard"
+            android:id="@+id/home"
             android:icon="@drawable/ic_home"
             android:title="@string/home" />
 

@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
+    <!-- CONTENT -->
     <!--Used LinearLayout here to wrap the Toolbar inside it,
     because DrawerLayout stretches out any View/ViewGroup to fill the whole screen,
     except the View/ViewGroup with android:layout_gravity="..."-->
@@ -23,8 +24,16 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.DayNight"
             app:title="Toolbar Title" />
+
+        <!-- Screen content -->
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </LinearLayout>
 
+    <!-- DRAWER -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="match_parent"

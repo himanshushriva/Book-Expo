@@ -46,6 +46,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Kotlin extensions for Fragment
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
+
     // Retrofit
     val retrofit = "3.0.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit")

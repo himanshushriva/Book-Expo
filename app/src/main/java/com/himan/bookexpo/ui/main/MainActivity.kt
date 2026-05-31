@@ -7,6 +7,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.himan.bookexpo.R
 import com.himan.bookexpo.databinding.ActivityMainBinding
 
@@ -29,7 +31,8 @@ class MainActivity : AppCompatActivity() {
         setupInsets(binding.linearLayout)
         setupInsets(binding.navigationView)
         setUpToolbar()
-        setupDrawer()
+        setupDrawerToggle()
+        setupDrawerNavigation()
     }
 
     private fun setupInsets(view: View) {
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         binding.toolbar.title = "Book Expo"
     }
 
-    private fun setupDrawer() {
+    private fun setupDrawerToggle() {
         actionBarDrawerToggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -58,5 +61,22 @@ class MainActivity : AppCompatActivity() {
         )
         binding.drawerLayout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
+    }
+
+    private fun setupDrawerNavigation() {
+        binding.navigationView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> {
+                    supportFragmentManager.commit {
+                        replace<HomeFragment>(R.id.fragmentContainer)
+                    }
+                }
+
+                else -> return@setNavigationItemSelectedListener false
+            }
+
+            binding.drawerLayout.closeDrawers()
+            true
+        }
     }
 }
