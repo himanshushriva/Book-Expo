@@ -3,12 +3,12 @@ package com.himan.bookexpo.data.remote
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitHelper {
+object ApiClient {
 
-    private val BASE_URL = "https://www.dbooks.org/api/"
+    private const val BASE_URL = "https://www.dbooks.org/api/"
 
-    fun getRetrofitInstance(): Retrofit {
-        return Retrofit.Builder()
+    val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
