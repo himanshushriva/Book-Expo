@@ -35,6 +35,13 @@ class MainActivity : AppCompatActivity() {
         setUpToolbar()
         setupDrawerToggle()
         setupDrawerNavigation()
+
+        // Avoid adding the fragment again when the Activity is recreated
+        if (savedInstanceState == null) {
+            // Set HomeFragment as the default screen
+            openHome()
+            binding.navigationView.setCheckedItem(R.id.home)
+        }
     }
 
     private fun setupInsets(view: View) {
@@ -76,17 +83,19 @@ class MainActivity : AppCompatActivity() {
             }
 
             when (menuItem.itemId) {
-                R.id.home -> {
-                    supportFragmentManager.commit {
-                        replace<HomeFragment>(R.id.fragmentContainer)
-                    }
-                }
+                R.id.home -> openHome()
 
                 else -> return@setNavigationItemSelectedListener false
             }
 
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
+        }
+    }
+
+    private fun openHome() {
+        supportFragmentManager.commit {
+            replace<HomeFragment>(R.id.fragmentContainer)
         }
     }
 }
