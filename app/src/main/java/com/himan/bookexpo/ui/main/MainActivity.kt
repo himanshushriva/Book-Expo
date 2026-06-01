@@ -5,12 +5,14 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.himan.bookexpo.R
 import com.himan.bookexpo.databinding.ActivityMainBinding
+import com.himan.bookexpo.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,8 +66,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupDrawerNavigation() {
-        binding.navigationView.setNavigationItemSelectedListener {
-            when (it.itemId) {
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            val isCurrentDestination =
+                binding.navigationView.checkedItem?.itemId == menuItem.itemId
+
+            if (isCurrentDestination) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+                return@setNavigationItemSelectedListener true
+            }
+
+            when (menuItem.itemId) {
                 R.id.home -> {
                     supportFragmentManager.commit {
                         replace<HomeFragment>(R.id.fragmentContainer)
@@ -75,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                 else -> return@setNavigationItemSelectedListener false
             }
 
-            binding.drawerLayout.closeDrawers()
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
     }
