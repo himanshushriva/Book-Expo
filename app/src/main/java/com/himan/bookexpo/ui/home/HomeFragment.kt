@@ -1,10 +1,14 @@
 package com.himan.bookexpo.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.himan.bookexpo.data.remote.ApiClient
+import com.himan.bookexpo.data.repository.BookRepository
 import com.himan.bookexpo.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -13,9 +17,16 @@ class HomeFragment : Fragment() {
     private val binding: FragmentHomeBinding
         get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private val repository: BookRepository by lazy {
+        BookRepository(ApiClient.bookApi)
+    }
 
+    private val viewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(repository)
+    }
+
+    companion object {
+        private const val TAG = "HomeFragment"
     }
 
     override fun onCreateView(
@@ -30,11 +41,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //binding.textView.text = binding.toString()
+        observeUi()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observeUi() {
+        viewModel.books.observe(viewLifecycleOwner) { books ->
+            binding.textView.text = books.toString()
+        }
     }
 }
