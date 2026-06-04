@@ -10,12 +10,12 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: BookRepository) : ViewModel() {
 
+    private val _books = MutableLiveData<List<Book>>()
+    val books: LiveData<List<Book>> = _books
+
     init {
         loadBooks()     // calling here, not in the HomeFragment to avoid network call again after the Fragment recreation
     }
-
-    private val _books = MutableLiveData<List<Book>>()
-    val books: LiveData<List<Book>> = _books
 
     fun loadBooks() {
         viewModelScope.launch {
