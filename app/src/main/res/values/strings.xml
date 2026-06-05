@@ -4,12 +4,14 @@
     <!--Strings for navigation drawer-->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="navigation_drawer">BookHub</string>
 
-    <!--Navigation Text-->
+    <!--Navigation menu item-->
     <string name="home">Home</string>
     <string name="my_library">My Library</string>
     <string name="about_developer">About Developer</string>
     <string name="about_app">About App</string>
+
+    <!--Content description-->
+    <string name="book_cover">Book cover</string>
 
 </resources>
