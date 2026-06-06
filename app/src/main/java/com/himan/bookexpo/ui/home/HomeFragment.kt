@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        observeUi()
+        observeUiState()
     }
 
     override fun onDestroyView() {
@@ -61,9 +61,10 @@ class HomeFragment : Fragment() {
         binding.rvBooks.adapter = adapter
     }
 
-    private fun observeUi() {
-        viewModel.books.observe(viewLifecycleOwner) { books ->
-            adapter.submitList(books)
+    private fun observeUiState() {
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+
+            adapter.submitList(state.books)
         }
     }
 }
