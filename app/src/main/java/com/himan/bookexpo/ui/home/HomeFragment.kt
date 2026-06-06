@@ -1,12 +1,12 @@
 package com.himan.bookexpo.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.himan.bookexpo.data.remote.ApiClient
 import com.himan.bookexpo.data.repository.BookRepository
 import com.himan.bookexpo.databinding.FragmentHomeBinding
@@ -25,6 +25,8 @@ class HomeFragment : Fragment() {
         HomeViewModelFactory(repository)
     }
 
+    private val adapter = BookAdapter()
+
     companion object {
         private const val TAG = "HomeFragment"
     }
@@ -41,6 +43,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupRecyclerView()
         observeUi()
     }
 
@@ -49,9 +52,14 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
+    private fun setupRecyclerView() {
+        binding.rvBooks.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvBooks.adapter = adapter
+    }
+
     private fun observeUi() {
         viewModel.books.observe(viewLifecycleOwner) { books ->
-            binding.textView.text = books.toString()
+            adapter.submitList(books)
         }
     }
 }
