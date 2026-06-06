@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.himan.bookexpo.data.model.Book
 import com.himan.bookexpo.databinding.ItemBookBinding
 
-class BookAdapter : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+class BookAdapter(
+    private val onBookClicked: (Book) -> Unit
+) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
 
     private val books = mutableListOf<Book>()
 
@@ -35,12 +37,18 @@ class BookAdapter : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
     override fun getItemCount(): Int = books.size
 
 
-    class BookViewHolder(val binding: ItemBookBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class BookViewHolder(
+        val binding: ItemBookBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(book: Book) {
             binding.tvBookTitle.text = book.title
             binding.tvBookSubtitle.text = book.subtitle.ifEmpty { "Not available" }
             binding.tvBookAuthor.text = book.authors.ifEmpty { "Unknown" }
+
+            binding.root.setOnClickListener {
+                onBookClicked(book)
+            }
         }
     }
 }

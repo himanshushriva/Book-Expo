@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +26,10 @@ class HomeFragment : Fragment() {
         HomeViewModelFactory(repository)
     }
 
-    private val adapter = BookAdapter()
+    private val adapter = BookAdapter { book ->
+        Toast.makeText(requireContext(), "Book clicked: ${book.title}",
+            Toast.LENGTH_SHORT).show()
+    }
 
     companion object {
         private const val TAG = "HomeFragment"
