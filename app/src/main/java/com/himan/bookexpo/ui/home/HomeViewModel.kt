@@ -18,9 +18,16 @@ class HomeViewModel(private val repository: BookRepository) : ViewModel() {
 
     fun loadBooks() {
         viewModelScope.launch {
+            _uiState.value = _uiState.value?.copy(
+                isLoading = true
+            )
+
             val fetchedBooks = repository.getBooks()
 
-            _uiState.value = HomeUiState(books = fetchedBooks)
+            _uiState.value = HomeUiState(
+                books = fetchedBooks,
+                isLoading = false
+            )
         }
     }
 }
