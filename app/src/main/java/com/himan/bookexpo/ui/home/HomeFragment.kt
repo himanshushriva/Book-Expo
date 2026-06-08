@@ -67,6 +67,9 @@ class HomeFragment : Fragment() {
 
             binding.progressIndicator.isVisible = state.isLoading
 
+            binding.tvError.isVisible = state.errorMessage != null
+            binding.tvError.text = state.errorMessage?.ifEmpty { "Some error occurred!" }
+
             adapter.submitList(state.books)
         }
     }

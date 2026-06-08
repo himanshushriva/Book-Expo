@@ -19,15 +19,24 @@ class HomeViewModel(private val repository: BookRepository) : ViewModel() {
     fun loadBooks() {
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(
-                isLoading = true
+                isLoading = true,
+                errorMessage = null
             )
 
-            val fetchedBooks = repository.getBooks()
+            try {
+                val fetchedBooks = repository.getBooks()
 
-            _uiState.value = HomeUiState(
-                books = fetchedBooks,
-                isLoading = false
-            )
+                _uiState.value = HomeUiState(
+                    books = fetchedBooks,
+                    isLoading = false
+                )
+
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value?.copy(
+                    isLoading = false,
+                    errorMessage = e.message
+                )
+            }
         }
     }
 }
