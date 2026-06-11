@@ -85,7 +85,11 @@ class HomeFragment : Fragment() {
             when (event) {
                 is HomeEvent.OpenBookDetails -> {
                     navigateToDetails(event.bookId)
+
+                    viewModel.clearEvent()
                 }
+
+                null -> Unit
             }
         }
     }

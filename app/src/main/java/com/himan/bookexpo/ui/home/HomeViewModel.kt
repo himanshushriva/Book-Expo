@@ -13,8 +13,8 @@ class HomeViewModel(private val repository: BookRepository) : ViewModel() {
     private val _uiState = MutableLiveData(HomeUiState())
     val uiState: LiveData<HomeUiState> = _uiState
 
-    private val _events = MutableLiveData<HomeEvent>()
-    val events: LiveData<HomeEvent> = _events
+    private val _events = MutableLiveData<HomeEvent?>()
+    val events: LiveData<HomeEvent?> = _events
 
     init {
         loadBooks()     // calling here, not in the HomeFragment to avoid network call again after the Fragment recreation
@@ -48,5 +48,9 @@ class HomeViewModel(private val repository: BookRepository) : ViewModel() {
         _events.value = HomeEvent.OpenBookDetails(
             book.id
         )
+    }
+
+    fun clearEvent() {
+        _events.value = null
     }
 }
