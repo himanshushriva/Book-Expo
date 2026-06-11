@@ -94,7 +94,10 @@ class HomeFragment : Fragment() {
 
         parentFragmentManager.commit {
             replace<BookDetailsFragment>(
-                R.id.fragmentContainer
+                R.id.fragmentContainer,
+                args = bundleOf(
+                    BookDetailsFragment.ARG_BOOK_ID to bookId
+                )
             )
             addToBackStack(null)
         }
