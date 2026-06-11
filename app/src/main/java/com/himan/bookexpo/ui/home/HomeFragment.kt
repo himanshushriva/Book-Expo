@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.himan.bookexpo.R
 import com.himan.bookexpo.data.remote.ApiClient
 import com.himan.bookexpo.data.repository.BookRepository
 import com.himan.bookexpo.databinding.FragmentHomeBinding
+import com.himan.bookexpo.ui.details.BookDetailsFragment
 
 class HomeFragment : Fragment() {
 
@@ -28,8 +32,7 @@ class HomeFragment : Fragment() {
     }
 
     private val adapter = BookAdapter { book ->
-        Toast.makeText(requireContext(), "Book clicked: ${book.title}",
-            Toast.LENGTH_SHORT).show()
+        viewModel.onBookClicked(book)
     }
 
     companion object {
@@ -49,7 +52,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+
         observeUiState()
+        observeEvents()
     }
 
     override fun onDestroyView() {
@@ -71,6 +76,27 @@ class HomeFragment : Fragment() {
             binding.tvError.text = state.errorMessage?.ifEmpty { "Some error occurred!" }
 
             adapter.submitList(state.books)
+        }
+    }
+
+    private fun observeEvents() {
+        viewModel.events.observe(viewLifecycleOwner) { event ->
+
+            when (event) {
+                is HomeEvent.OpenBookDetails -> {
+                    navigateToDetails(event.bookId)
+                }
+            }
+        }
+    }
+
+    private fun navigateToDetails(bookId: String) {
+
+        parentFragmentManager.commit {
+            replace<BookDetailsFragment>(
+                R.id.fragmentContainer
+            )
+            addToBackStack(null)
         }
     }
 }
