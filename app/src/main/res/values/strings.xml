@@ -14,4 +14,11 @@
     <!--Content description-->
     <string name="book_cover">Book cover</string>
 
+    <!--BookDetailsFragment-->
+    <string name="authors">Authors</string>
+    <string name="publisher">Publisher</string>
+    <string name="year">Year</string>
+    <string name="pages">Pages</string>
+    <string name="description">Description</string>
+
 </resources>

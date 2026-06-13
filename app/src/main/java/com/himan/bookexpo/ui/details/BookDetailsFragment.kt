@@ -2,6 +2,7 @@ package com.himan.bookexpo.ui.details
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.himan.bookexpo.R
@@ -28,7 +29,6 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
         val binding = FragmentBookDetailsBinding.bind(view)
 
         val bookId = requireArguments().getString(ARG_BOOK_ID)!!
-        binding.tvBookDetails.text = bookId
 
         observeUiState(binding)
 
@@ -38,10 +38,30 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
     private fun observeUiState(binding: FragmentBookDetailsBinding) {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
 
-            binding.tvBookDetails.text = buildString {
-                appendLine("bookDetails = ${state.bookDetails}")
-                appendLine("isLoading = ${state.isLoading}")
-                append("errorMessage = ${state.errorMessage}")
+            // Loading
+            binding.progressIndicator.isVisible = state.isLoading
+
+            // Error
+            binding.tvError.isVisible =
+                state.errorMessage != null
+            binding.tvError.text =
+                state.errorMessage?.ifEmpty { "Some error occurred!" }
+
+            val bookDetails = state.bookDetails ?: return@observe
+
+            // Success
+            binding.apply {
+                labelGroup.isVisible = true
+
+                tvTitle.text = bookDetails.title
+                tvSubtitle.text = bookDetails.subtitle
+                tvAuthors.text = bookDetails.authors.ifEmpty { "NA" }
+                tvPublisher.text = bookDetails.publisher.ifEmpty { "NA" }
+                tvYear.text = bookDetails.year.ifEmpty { "NA" }
+                tvPages.text = bookDetails.pages.ifEmpty { "NA" }
+                tvDescription.text = bookDetails.description.ifEmpty { "NA" }
+
+                sivBookImage.setImageResource(R.drawable.book_placeholder)
             }
         }
     }
