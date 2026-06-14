@@ -16,6 +16,8 @@ class BookRepository(
             val body = response.body()
                 ?: throw Exception("Response body is null")
 
+            throwIfStatusNotFound(body.status)
+
             return body.books
         } else {
             throw Exception("Request failed: ${response.code()}")
@@ -30,9 +32,17 @@ class BookRepository(
             val body = response.body()
                 ?: throw Exception("Response body is null")
 
+            throwIfStatusNotFound(body.status)
+
             return body
         } else {
             throw Exception("Request failed: ${response.code()}")
+        }
+    }
+
+    private fun throwIfStatusNotFound(status: String) {
+        if (status == "not found") {
+            throw Exception("Book/s not found")
         }
     }
 }
