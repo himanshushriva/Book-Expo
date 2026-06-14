@@ -46,7 +46,7 @@ class HomeViewModel(private val repository: BookRepository) : ViewModel() {
 
     fun onBookClicked(book: Book) {
         _events.value = HomeEvent.OpenBookDetails(
-            book.id
+            book.id.lowercase()
         )
     }
 
