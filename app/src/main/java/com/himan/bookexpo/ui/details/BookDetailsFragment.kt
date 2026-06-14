@@ -2,10 +2,12 @@ package com.himan.bookexpo.ui.details
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.himan.bookexpo.R
+import com.himan.bookexpo.data.model.BookDetails
 import com.himan.bookexpo.data.remote.ApiClient
 import com.himan.bookexpo.data.repository.BookRepository
 import com.himan.bookexpo.databinding.FragmentBookDetailsBinding
@@ -53,16 +55,36 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
             binding.apply {
                 labelGroup.isVisible = true
 
-                tvTitle.text = bookDetails.title
-                tvSubtitle.text = bookDetails.subtitle
-                tvAuthors.text = bookDetails.authors.ifEmpty { "NA" }
-                tvPublisher.text = bookDetails.publisher.ifEmpty { "NA" }
-                tvYear.text = bookDetails.year.ifEmpty { "NA" }
-                tvPages.text = bookDetails.pages.ifEmpty { "NA" }
-                tvDescription.text = bookDetails.description.ifEmpty { "NA" }
+                val decodedBookDetails = decodeHtml(bookDetails)
+
+                tvTitle.text = decodedBookDetails.title
+                tvSubtitle.text = decodedBookDetails.subtitle
+                tvAuthors.text = decodedBookDetails.authors.ifEmpty { "NA" }
+                tvPublisher.text = decodedBookDetails.publisher.ifEmpty { "NA" }
+                tvYear.text = decodedBookDetails.year.ifEmpty { "NA" }
+                tvPages.text = decodedBookDetails.pages.ifEmpty { "NA" }
+                tvDescription.text = decodedBookDetails.description.ifEmpty { "NA" }
 
                 sivBookImage.setImageResource(R.drawable.book_placeholder)
             }
         }
+    }
+
+    private fun decodeHtml(bookDetails: BookDetails): BookDetails {
+
+        return bookDetails.copy(
+            title = decodeHtml(bookDetails.title),
+            subtitle = decodeHtml(bookDetails.subtitle),
+            authors = decodeHtml(bookDetails.authors),
+            publisher = decodeHtml(bookDetails.publisher),
+            description = decodeHtml(bookDetails.description),
+        )
+    }
+
+    private fun decodeHtml(encodedText: String): String {
+        return HtmlCompat.fromHtml(
+            encodedText,
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        ).toString()
     }
 }
