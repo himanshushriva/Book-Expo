@@ -1,6 +1,10 @@
 package com.himan.bookexpo.ui.details
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
@@ -63,7 +67,11 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
                 tvPublisher.text = decodedBookDetails.publisher.ifEmpty { "NA" }
                 tvYear.text = decodedBookDetails.year.ifEmpty { "NA" }
                 tvPages.text = decodedBookDetails.pages.ifEmpty { "NA" }
-                tvDescription.text = decodedBookDetails.description.ifEmpty { "NA" }
+
+                setDescription(
+                    decodedBookDetails.description.ifEmpty { "NA" },
+                    binding
+                )
 
                 sivBookImage.setImageResource(R.drawable.book_placeholder)
             }
@@ -86,5 +94,36 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
             encodedText,
             HtmlCompat.FROM_HTML_MODE_LEGACY
         ).toString()
+    }
+
+    private fun setDescription(
+        description: String,
+        binding: FragmentBookDetailsBinding
+    ) {
+
+        val readMoreText = "Read More"
+
+        val fullText = "$description $readMoreText"
+
+        val spannable = SpannableString(fullText)
+
+        val start = fullText.indexOf(readMoreText)
+
+        val end = start + readMoreText.length
+
+        spannable.setSpan(
+            object : ClickableSpan() {
+
+                override fun onClick(widget: View) {
+                    //TODO
+                }
+            },
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        binding.tvDescription.text = spannable
+        binding.tvDescription.movementMethod = LinkMovementMethod.getInstance()
     }
 }
