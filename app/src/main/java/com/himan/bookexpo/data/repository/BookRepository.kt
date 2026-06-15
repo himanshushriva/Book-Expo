@@ -36,7 +36,9 @@ class BookRepository(
         //Fetch book details from API
         try {
 
-            val response = bookApi.getBookDetails(id)
+            val response = bookApi.getBookDetails(
+                id.lowercase()      // DBooks API returns "not found" for uppercase ids
+            )
 
             if (!response.isSuccessful) {
                 throw Exception("Request failed: ${response.code()}")
