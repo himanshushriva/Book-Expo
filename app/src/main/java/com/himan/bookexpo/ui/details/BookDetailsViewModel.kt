@@ -14,6 +14,9 @@ class BookDetailsViewModel(
     private val _uiState = MutableLiveData(BookDetailsUiState())
     val uiState: LiveData<BookDetailsUiState> = _uiState
 
+    private val _events = MutableLiveData<BookDetailsEvent?>()
+    val events: LiveData<BookDetailsEvent?> = _events
+
     fun loadBookDetails(id: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value?.copy(
@@ -35,5 +38,15 @@ class BookDetailsViewModel(
                 )
             }
         }
+    }
+
+    fun onReadMoreClicked(url: String) {
+        _events.value = BookDetailsEvent.OpenBookUrl(
+            url
+        )
+    }
+
+    fun clearEvent() {
+        _events.value = null
     }
 }

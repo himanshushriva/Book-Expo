@@ -24,4 +24,8 @@
         </activity>
     </application>
 
+    <queries>
+        <package android:name="com.android.chrome"/>
+    </queries>
+
 </manifest>

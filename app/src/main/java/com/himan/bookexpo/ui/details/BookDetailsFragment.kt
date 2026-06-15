@@ -1,11 +1,14 @@
 package com.himan.bookexpo.ui.details
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -37,6 +40,7 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
         val bookId = requireArguments().getString(ARG_BOOK_ID)!!
 
         observeUiState(binding)
+        observeEvents()
 
         viewModel.loadBookDetails(bookId)
     }
@@ -70,10 +74,24 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
 
                 setDescription(
                     decodedBookDetails.description.ifEmpty { "NA" },
+                    decodedBookDetails.url,
                     binding
                 )
 
                 sivBookImage.setImageResource(R.drawable.book_placeholder)
+            }
+        }
+    }
+
+    private fun observeEvents() {
+        viewModel.events.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                is BookDetailsEvent.OpenBookUrl -> {
+                    openBookUrl(event.url)
+                    viewModel.clearEvent()
+                }
+
+                else -> Unit
             }
         }
     }
@@ -98,6 +116,7 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
 
     private fun setDescription(
         description: String,
+        url: String,
         binding: FragmentBookDetailsBinding
     ) {
 
@@ -115,7 +134,7 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
             object : ClickableSpan() {
 
                 override fun onClick(widget: View) {
-                    //TODO
+                    viewModel.onReadMoreClicked(url)
                 }
             },
             start,
@@ -125,5 +144,24 @@ class BookDetailsFragment : Fragment(R.layout.fragment_book_details) {
 
         binding.tvDescription.text = spannable
         binding.tvDescription.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private fun openBookUrl(url: String) {
+        val customTabsIntent = CustomTabsIntent.Builder().build()
+
+        val isChromeInstalled = try {
+            requireContext().packageManager
+                .getPackageInfo("com.android.chrome", 0)
+            true
+        } catch (_: PackageManager.NameNotFoundException) {
+            false
+        }
+
+        if (isChromeInstalled) {
+            // Explicitly set Chrome as the handler
+            customTabsIntent.intent.`package` = "com.android.chrome"
+        }
+
+        customTabsIntent.launchUrl(requireContext(), url.toUri())
     }
 }
