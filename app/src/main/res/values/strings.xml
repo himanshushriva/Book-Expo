@@ -21,4 +21,8 @@
     <string name="pages">Pages</string>
     <string name="description">Description</string>
 
+    <!--Toolbar Title-->
+    <string name="title_home">@string/app_name</string>
+    <string name="title_book_details">Book Details</string>
+
 </resources>

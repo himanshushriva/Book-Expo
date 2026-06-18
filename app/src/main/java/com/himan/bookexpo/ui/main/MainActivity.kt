@@ -3,15 +3,18 @@ package com.himan.bookexpo.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.StringRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.himan.bookexpo.R
 import com.himan.bookexpo.databinding.ActivityMainBinding
+import com.himan.bookexpo.ui.details.BookDetailsFragment
 import com.himan.bookexpo.ui.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +45,8 @@ class MainActivity : AppCompatActivity() {
             openHome()
             binding.navigationView.setCheckedItem(R.id.home)
         }
+
+        syncToolbarAndDrawerWithBackStack()
     }
 
     private fun setupInsets(view: View) {
@@ -97,5 +102,57 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commit {
             replace<HomeFragment>(R.id.fragmentContainer)
         }
+    }
+
+    private fun syncToolbarAndDrawerWithBackStack() {
+        supportFragmentManager
+            .addOnBackStackChangedListener {
+
+                val currentFragment =
+                    supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+                        ?: return@addOnBackStackChangedListener
+
+                when (currentFragment) {
+                    is BookDetailsFragment ->
+                        configureSecondaryToolbarAndDrawer(R.string.title_book_details)
+
+                    is HomeFragment ->
+                        configureTopLevelToolbarAndDrawer(R.string.title_home)
+                }
+            }
+    }
+
+    private fun configureSecondaryToolbarAndDrawer(@StringRes title: Int) {
+
+        binding.toolbar.title = getString(title)
+
+        binding.toolbar.setNavigationIcon(
+            R.drawable.ic_arrow_back
+        )
+
+        binding.toolbar.setNavigationOnClickListener {
+            //supportFragmentManager.popBackStack()
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.drawerLayout.setDrawerLockMode(
+            DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+        )
+    }
+
+    private fun configureTopLevelToolbarAndDrawer(@StringRes title: Int) {
+
+        binding.toolbar.title = getString(title)
+
+        //binding.toolbar.navigationIcon = actionBarDrawerToggle.drawerArrowDrawable
+        actionBarDrawerToggle.syncState()
+
+        binding.toolbar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        binding.drawerLayout.setDrawerLockMode(
+            DrawerLayout.LOCK_MODE_UNLOCKED
+        )
     }
 }
