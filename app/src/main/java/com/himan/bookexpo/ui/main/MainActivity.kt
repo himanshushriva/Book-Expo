@@ -109,18 +109,23 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager
             .addOnBackStackChangedListener {
 
-                val currentFragment =
-                    supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-                        ?: return@addOnBackStackChangedListener
-
-                when (currentFragment) {
-                    is BookDetailsFragment ->
-                        configureSecondaryToolbarAndDrawer(R.string.title_book_details)
-
-                    is HomeFragment ->
-                        configureTopLevelToolbarAndDrawer(R.string.title_home)
-                }
+                updateToolbarAndDrawer()
             }
+        updateToolbarAndDrawer()
+    }
+
+    private fun updateToolbarAndDrawer() {
+        val currentFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+                ?: return
+
+        when (currentFragment) {
+            is BookDetailsFragment ->
+                configureSecondaryToolbarAndDrawer(R.string.title_book_details)
+
+            is HomeFragment ->
+                configureTopLevelToolbarAndDrawer(R.string.title_home)
+        }
     }
 
     private fun configureSecondaryToolbarAndDrawer(@StringRes toolbarTitle: Int) {
