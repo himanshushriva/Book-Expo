@@ -14,6 +14,7 @@ import androidx.fragment.app.commit
 import androidx.fragment.app.replace
 import com.himan.bookexpo.R
 import com.himan.bookexpo.databinding.ActivityMainBinding
+import com.himan.bookexpo.extensions.getThemeColor
 import com.himan.bookexpo.ui.details.BookDetailsFragment
 import com.himan.bookexpo.ui.home.HomeFragment
 
@@ -126,6 +127,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.toolbar.title = getString(title)
 
+        binding.toolbar.setBackgroundColor(
+            getThemeColor(
+                com.google.android.material.R.attr.colorSurfaceContainer
+            )
+        )
+
         binding.toolbar.setNavigationIcon(
             R.drawable.ic_arrow_back
         )
@@ -143,6 +150,12 @@ class MainActivity : AppCompatActivity() {
     private fun configureTopLevelToolbarAndDrawer(@StringRes title: Int) {
 
         binding.toolbar.title = getString(title)
+
+        binding.toolbar.setBackgroundColor(
+            getThemeColor(
+                com.google.android.material.R.attr.colorSurface
+            )
+        )
 
         //binding.toolbar.navigationIcon = actionBarDrawerToggle.drawerArrowDrawable
         actionBarDrawerToggle.syncState()
