@@ -123,23 +123,25 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun configureSecondaryToolbarAndDrawer(@StringRes title: Int) {
+    private fun configureSecondaryToolbarAndDrawer(@StringRes toolbarTitle: Int) {
 
-        binding.toolbar.title = getString(title)
+        binding.toolbar.apply {
+            title = getString(toolbarTitle)
 
-        binding.toolbar.setBackgroundColor(
-            getThemeColor(
-                com.google.android.material.R.attr.colorSurfaceContainer
+            setBackgroundColor(
+                getThemeColor(
+                    com.google.android.material.R.attr.colorSurfaceContainer
+                )
             )
-        )
 
-        binding.toolbar.setNavigationIcon(
-            R.drawable.ic_arrow_back
-        )
+            setNavigationIcon(
+                R.drawable.ic_arrow_back
+            )
 
-        binding.toolbar.setNavigationOnClickListener {
-            //supportFragmentManager.popBackStack()
-            onBackPressedDispatcher.onBackPressed()
+            setNavigationOnClickListener {
+                //supportFragmentManager.popBackStack()
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
 
         binding.drawerLayout.setDrawerLockMode(
@@ -147,21 +149,23 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun configureTopLevelToolbarAndDrawer(@StringRes title: Int) {
+    private fun configureTopLevelToolbarAndDrawer(@StringRes toolbarTitle: Int) {
 
-        binding.toolbar.title = getString(title)
+        binding.toolbar.apply {
+            title = getString(toolbarTitle)
 
-        binding.toolbar.setBackgroundColor(
-            getThemeColor(
-                com.google.android.material.R.attr.colorSurface
+            setBackgroundColor(
+                getThemeColor(
+                    com.google.android.material.R.attr.colorSurface
+                )
             )
-        )
 
-        //binding.toolbar.navigationIcon = actionBarDrawerToggle.drawerArrowDrawable
-        actionBarDrawerToggle.syncState()
+            //navigationIcon = actionBarDrawerToggle.drawerArrowDrawable
+            actionBarDrawerToggle.syncState()
 
-        binding.toolbar.setNavigationOnClickListener {
-            binding.drawerLayout.openDrawer(GravityCompat.START)
+            setNavigationOnClickListener {
+                binding.drawerLayout.openDrawer(GravityCompat.START)
+            }
         }
 
         binding.drawerLayout.setDrawerLockMode(
